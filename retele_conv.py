@@ -8,7 +8,7 @@ import pathlib as pt
 import yaml
 # pip install pyyaml
 
-config = None
+config = None  
 
 with open('config.yml') as f: # reads .yml/.yaml files
     config = yaml.load(f)
