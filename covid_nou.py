@@ -16,9 +16,9 @@ from tensorflow.keras.applications import VGG16
 import yaml
 from matplotlib import pyplot 
 from sklearn.metrics import roc_curve,roc_auc_score,confusion_matrix, accuracy_score,recall_score,f1_score,precision_score,plot_confusion_matrix,ConfusionMatrixDisplay
-from sklearn.model_selection import cross_val_predict
-from sklearn.svm import SVC
 from matplotlib import pyplot as plt
+from confusion_matrix_metrics import convert_prob , conf_mat, metrics
+
 config = None
 with open('config.yml') as f: # reads .yml/.yaml files
     config = yaml.load(f)
@@ -123,14 +123,11 @@ print(probs)
 
 confusion_matrix_manual=conf_mat(probs,y_test)
 preds=convert_prob(probs)
-
 cm=confusion_matrix(preds,y_test)
-
 print("Matrice de confuzie calculata manual : ", confusion_matrix_manual,"si caculata cu functia sklearn:",cm)
 
 accuracy,senzitivity,specifity,precision,recall,f1=metrics(confusion_matrix_manual,y_test)
 print("ACC:",accuracy,"TPR:",senzitivity,"TNR:",specifity,"PPV:" ,precision,"FPR:",recall,"f1:",f1)
-
 
 acc=accuracy_score(preds,y_test)
 preci=precision_score(preds,y_test)
@@ -140,7 +137,6 @@ print("acc",acc,"PPV",preci,"FPR",reca,"f1:",F1)
 
 ConfusionMatrixDisplay.from_predictions(y_test, preds)
 plt.show()
-
 
 fpr, tpr, thresholds = roc_curve(y_test, probs)
 plt.plot(fpr,tpr, marker='.', label='Logistic')
