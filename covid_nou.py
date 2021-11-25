@@ -14,55 +14,16 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from plot_acc_loss import plot_acc_loss 
 from tensorflow.keras.applications import VGG16
 import yaml
-from matplotlib import pyplot 
 from sklearn.metrics import roc_curve,roc_auc_score,confusion_matrix, accuracy_score,recall_score,f1_score,precision_score,plot_confusion_matrix,ConfusionMatrixDisplay
-from matplotlib import pyplot as plt
+import matplotlib.pyplot as plt
 from confusion_matrix_metrics import convert_prob , conf_mat, metrics
 
 config = None
-with open('config.yml') as f: # reads .yml/.yaml files
+with open('config.yml') as f:
     config = yaml.load(f)
 
 dataset_dir  = config['net']['dir']
 BATCH_SIZE = config['train']['bs']
-
-def convert_prob(probilities):
-    for i in range(len(probilities)):
-        if(probilities[i]>0.5):
-            probilities[i]=1
-        else:
-            probilities[i]=0   
-    return probilities          
-
-def conf_mat(prob_arr, input_arr):
-
-        # confusion matrix
-        conf_arr = [[0, 0], [0, 0]]
-        n=len(prob_arr)
-        for i in range(n):
-                if int(input_arr[i]) ==0 :
-                        if float(prob_arr[i]) < 0.5:
-                                conf_arr[0][0] = conf_arr[0][0] + 1
-                        else:
-                                conf_arr[0][1] = conf_arr[0][1] + 1
-                elif int(input_arr[i]) == 1:
-                        if float(prob_arr[i]) >= 0.5:
-                                conf_arr[1][1] = conf_arr[1][1] +1
-                        else:
-                                conf_arr[1][0] = conf_arr[1][0] +1
-
-        return conf_arr
-        
-def metrics(conf_arr,input_arr):
-    accuracy=float(conf_arr[0][0] + conf_arr[1][1])/(len(input_arr))
-    senzitivity=float (conf_arr[1][1]/(conf_arr[1][1]+conf_arr[1][0]))
-    specifity=float(conf_arr[0][0]/(conf_arr[0][0]+conf_arr[0][1]))
-    precision=float(conf_arr[1][1]/(conf_arr[1][1]+conf_arr[0][1]))
-    recall=float(conf_arr[0][1]/(conf_arr[0][0]+conf_arr[0][1])) 
-    f1=2*(precision*senzitivity/(precision+senzitivity))
-    return accuracy,senzitivity,specifity,precision,recall,f1
-
-
 
 train_datagen = ImageDataGenerator(**config['augumentare'])
 validation_datagen = ImageDataGenerator(rescale=1./255)     
@@ -141,7 +102,7 @@ plt.show()
 fpr, tpr, thresholds = roc_curve(y_test, probs)
 plt.plot(fpr,tpr, marker='.', label='Logistic')
 plt.xlabel('False Positive Rate')
-plt.ylabel('True Positive Rate')=
+plt.ylabel('True Positive Rate')
 plt.legend()
 plt.show()
 
