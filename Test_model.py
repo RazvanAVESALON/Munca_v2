@@ -1,11 +1,5 @@
 
 import tensorflow as tf
-from tensorflow.keras import Sequential
-from tensorflow.keras.layers import Dense
-from tensorflow.keras.layers import Conv2D
-from tensorflow.keras.layers import MaxPool2D
-from tensorflow.keras.layers import Flatten
-from tensorflow.keras.layers import Dropout
 import tensorflow_datasets as tfds
 from numpy import unique
 from numpy import argmax
@@ -20,7 +14,6 @@ with open('config.yml') as f: # reads .yml/.yaml files
 
 dataset_dir  = config['net']['dir']
 BATCH_SIZE = config['train']['bs']
-
 
 validation_datagen = ImageDataGenerator(rescale=1./255)    
 
