@@ -68,7 +68,7 @@ model.summary()
 conv_base.trainable = False
 
 model.compile(loss='binary_crossentropy', optimizer=tf.keras.optimizers.RMSprop(lr=config['train']['lr']), metrics=['accuracy'])
-callbacks =[keras.callbacks.CSVLogger("file.csv{local_dt}", separator="," , append=False)]
+callbacks =[keras.callbacks.CSVLogger(f"file{local_dt}.csv", separator="," , append=False)]
 NUM_EPOCHS = config['train']['n_epochs']
 history = model.fit(train_batches, steps_per_epoch = len(train_batches) ,validation_data = validation_batches, validation_steps = len(validation_batches), epochs= NUM_EPOCHS , callbacks=callbacks)
 
@@ -87,8 +87,8 @@ preds=convert_prob(probs)
 cm=confusion_matrix(preds,y_test)
 print("Matrice de confuzie calculata manual : ", confusion_matrix_manual,"si caculata cu functia sklearn:",cm)
 
-accuracy,senzitivity,specifity,precision,recall,f1=metrics(confusion_matrix_manual,y_test)
-print("ACC:",accuracy,"TPR:",senzitivity,"TNR:",specifity,"PPV:" ,precision,"FPR:",recall,"f1:",f1)
+accuracy,senzitivity,specifity,precision,FPR,f1=metrics(confusion_matrix_manual,y_test)
+print("ACC:",accuracy,"TPR:",senzitivity,"TNR:",specifity,"PPV:" ,precision,"FPR:",FPR,"f1:",f1)
 
 acc=accuracy_score(preds,y_test)
 preci=precision_score(preds,y_test)
