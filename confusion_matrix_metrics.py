@@ -11,9 +11,9 @@ def conf_mat(prob_arr, input_arr):
 
         # confusion matrix
         conf_arr = [[0, 0], [0, 0]]
-        n=len(prob_arr)
+        n=len(input_arr)
         for i in range(n):
-                if int(input_arr[i]) ==0 :
+                if int(input_arr[i]) == 0 :
                         if float(prob_arr[i]) < 0.5:
                                 conf_arr[0][0] = conf_arr[0][0] + 1
                         else:
