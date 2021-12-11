@@ -17,6 +17,8 @@ import yaml
 from sklearn.metrics import roc_curve,roc_auc_score,confusion_matrix, accuracy_score,recall_score,f1_score,precision_score,plot_confusion_matrix,ConfusionMatrixDisplay
 import matplotlib.pyplot as plt
 from confusion_matrix_metrics import convert_prob , conf_mat, metrics
+from datetime import datetime
+local_dt=datetime.now()
 
 config = None
 with open('config.yml') as f:
@@ -46,12 +48,12 @@ print(y_train.shape)
 
 labels = {0: 'COVID', 1: 'Normal'}
 
-fig = pyplot.figure(figsize=(32,32))
+fig = plt.figure(figsize=(32,32))
 for i in range(x_train.shape[0]):
     ax = fig.add_subplot(int(x_train.shape[0]/2), int(x_train.shape[0]/2), i+1)
     ax.title.set_text(labels[y_train[i]])
-    pyplot.imshow(x_train[i], cmap=pyplot.get_cmap('gray'))
-pyplot.show()
+    plt.imshow(x_train[i], cmap=plt.get_cmap('gray'))
+plt.show()
 
 in_shape = (config['net']['img'][0], config['net']['img'][1], 3)
 
@@ -68,7 +70,7 @@ model.summary()
 conv_base.trainable = False
 
 model.compile(loss='binary_crossentropy', optimizer=tf.keras.optimizers.RMSprop(lr=config['train']['lr']), metrics=['accuracy'])
-callbacks =[keras.callbacks.CSVLogger(f"file{local_dt}.csv", separator="," , append=False)]
+callbacks =[keras.callbacks.CSVLogger(f"file{datetime.now().strftime('%H%M_%m%d%Y')}.csv", separator="," , append=False)]
 NUM_EPOCHS = config['train']['n_epochs']
 history = model.fit(train_batches, steps_per_epoch = len(train_batches) ,validation_data = validation_batches, validation_steps = len(validation_batches), epochs= NUM_EPOCHS , callbacks=callbacks)
 
@@ -78,7 +80,7 @@ plot_acc_loss(history)
 test_generator = validation_datagen.flow_from_directory(dataset_dir + '/test', target_size=config['net']['img'], batch_size=config['train']['bs'], class_mode='binary')
 x_test,y_test=test_generator[0]
 print(x_test.shape,y_test.shape)
-probs=model.predict_generator(test_generator,14)
+probs=model.predict_generator(test_generator,1)
 print(probs)
 
 
