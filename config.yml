@@ -8,14 +8,14 @@ train:
   bs: 32
   lr: 0.0001
   opt: "RMSprop" 
-  n_epochs: 10
+  n_epochs: 50
   steps_per_epoch: 15
 
 augumentare:
   rescale: 0.00392156862745098
   rotation_range: 40
   zca_epsilon: 0.000001
-  zca_whitening: True
+  zca_whitening: False
   width_shift_range: 0.2
   height_shift_range: 0.2
   shear_range: 0.2
