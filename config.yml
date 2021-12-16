@@ -1,7 +1,6 @@
 net:
   n1: 256
   img: [128,128]
-  steps: 4
   dir: "D:\\ai intro\\AI intro\\5. Retele Neurale\\covid_dataset"
 
 train:
@@ -9,7 +8,6 @@ train:
   lr: 0.0001
   opt: "RMSprop" 
   n_epochs: 50
-  steps_per_epoch: 15
 
 augumentare:
   rescale: 0.00392156862745098
@@ -21,4 +19,4 @@ augumentare:
   shear_range: 0.2
   zoom_range: 0.2
   horizontal_flip: True
-  fill_mode: 'nearest'
+  fill_mode: 'reflect'
