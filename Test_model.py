@@ -1,5 +1,6 @@
 
 import tensorflow as tf
+from tensorflow import keras
 import tensorflow_datasets as tfds
 from numpy import load, unique
 from numpy import argmax
@@ -11,6 +12,8 @@ from confusion_matrix_metrics import convert_prob , conf_mat, metrics
 from sklearn.metrics import roc_curve,roc_auc_score,confusion_matrix, accuracy_score,recall_score,f1_score,precision_score,plot_confusion_matrix,ConfusionMatrixDisplay
 import matplotlib.pyplot as plt
 import pandas as pd 
+from sklearn.model_selection import train_test_split
+
 config = None
 with open('config.yml') as f: # reads .yml/.yaml files
     config = yaml.load(f)
@@ -19,42 +22,40 @@ dataset_dir  = config['net']['dir']
 BATCH_SIZE = config['train']['bs']
 
 validation_datagen = ImageDataGenerator(rescale=1./255)    
-network=pd.read_csv (r"D:\ai intro\Munca_v2\file1911_12022021.csv")
-new_model = tf.convert_to_tensor(network)
+new_model = keras.models.load_model('damn1926_12152021.h5')
 new_model.summary()
 
 test_generator = validation_datagen.flow_from_directory(dataset_dir + '/test', target_size=config['net']['img'], batch_size=config['train']['bs'], class_mode='binary')
-x_test,y_test=test_generator[0]
-print(x_test.shape,y_test.shape)
-probs=new_model.predict_generator(test_generator,1)
+print (test_generator)
+probs=new_model.predict_generator(test_generator)
 
-print(y_test.shape,probs.shape) 
+#print(y_test.shape,probs.shape) 
 
-confusion_matrix_manual=conf_mat(probs,y_test)
+confusion_matrix_manual=conf_mat(probs,test_generator.classes)
 preds=convert_prob(probs)
-cm=confusion_matrix(preds,y_test)
+cm=confusion_matrix(preds,test_generator.classes)
 print("Matrice de confuzie calculata manual : ", confusion_matrix_manual,"si caculata cu functia sklearn:",cm)
 
-accuracy,senzitivity,specifity,precision,FPR,f1=metrics(confusion_matrix_manual,y_test)
-print("ACC:",accuracy,"TPR:",senzitivity,"TNR:",specifity,"PPV:" ,precision,"FPR:",FPR,"f1:",f1)
+#accuracy,senzitivity,specifity,precision,FPR,f1=metrics(confusion_matrix_manual,test_generator.classes)
+#print("ACC:",accuracy,"TPR:",senzitivity,"TNR:",specifity,"PPV:" ,precision,"FPR:",FPR,"f1:",f1)
 
-acc=accuracy_score(preds,y_test)
-preci=precision_score(preds,y_test)
-reca=recall_score(preds,y_test)
-F1=f1_score(preds,y_test)
+acc=accuracy_score(preds,test_generator.classes)
+preci=precision_score(preds,test_generator.classes)
+reca=recall_score(preds,test_generator.classes)
+F1=f1_score(preds,test_generator.classes)
 print("acc",acc,"PPV",preci,"FPR",reca,"f1:",F1)
 
-ConfusionMatrixDisplay.from_predictions(y_test, preds)
+ConfusionMatrixDisplay.from_predictions(test_generator.classes, preds)
 plt.show()
 
-fpr, tpr, thresholds = roc_curve(y_test, probs)
+fpr, tpr, thresholds = roc_curve(test_generator.classes, probs)
 plt.plot(fpr,tpr, marker='.', label='Logistic')
 plt.xlabel('False Positive Rate')
 plt.ylabel('True Positive Rate')
 plt.legend()
 plt.show()
 
-auc = roc_auc_score(y_test, probs)
+auc = roc_auc_score(test_generator.classes,  probs)
 print('AUC: %.3f' % auc)
 
 
