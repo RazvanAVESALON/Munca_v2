@@ -18,6 +18,8 @@ from sklearn.metrics import roc_curve,roc_auc_score,confusion_matrix, accuracy_s
 import matplotlib.pyplot as plt
 from confusion_matrix_metrics import convert_prob , conf_mat, metrics
 from datetime import datetime
+
+
 local_dt=datetime.now()
 
 config = None
@@ -74,42 +76,6 @@ callbacks =[keras.callbacks.CSVLogger(f"file{datetime.now().strftime('%H%M_%m%d%
 NUM_EPOCHS = config['train']['n_epochs']
 history = model.fit(train_batches, steps_per_epoch = len(train_batches) ,validation_data = validation_batches, validation_steps = len(validation_batches), epochs= NUM_EPOCHS , callbacks=callbacks)
 
-model.save('damn.h5')  
+model.save(f"damn{datetime.now().strftime('%H%M_%m%d%Y')}.h5")  
 
 plot_acc_loss(history)
-test_generator = validation_datagen.flow_from_directory(dataset_dir + '/test', target_size=config['net']['img'], batch_size=config['train']['bs'], class_mode='binary')
-x_test,y_test=test_generator[0]
-print(x_test.shape,y_test.shape)
-probs=model.predict_generator(test_generator,1)
-print(probs)
-
-
-confusion_matrix_manual=conf_mat(probs,y_test)
-preds=convert_prob(probs)
-cm=confusion_matrix(preds,y_test)
-print("Matrice de confuzie calculata manual : ", confusion_matrix_manual,"si caculata cu functia sklearn:",cm)
-
-accuracy,senzitivity,specifity,precision,FPR,f1=metrics(confusion_matrix_manual,y_test)
-print("ACC:",accuracy,"TPR:",senzitivity,"TNR:",specifity,"PPV:" ,precision,"FPR:",FPR,"f1:",f1)
-
-acc=accuracy_score(preds,y_test)
-preci=precision_score(preds,y_test)
-reca=recall_score(preds,y_test)
-F1=f1_score(preds,y_test)
-print("acc",acc,"PPV",preci,"FPR",reca,"f1:",F1)
-
-ConfusionMatrixDisplay.from_predictions(y_test, preds)
-plt.show()
-
-fpr, tpr, thresholds = roc_curve(y_test, probs)
-plt.plot(fpr,tpr, marker='.', label='Logistic')
-plt.xlabel('False Positive Rate')
-plt.ylabel('True Positive Rate')
-plt.legend()
-plt.show()
-
-auc = roc_auc_score(y_test, probs)
-print('AUC: %.3f' % auc)
-
-test_loss, test_acc = model.evaluate_generator(test_generator, steps=len(test_generator))
-print('test acc:', test_acc)
