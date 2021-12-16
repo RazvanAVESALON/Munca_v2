@@ -6,3 +6,10 @@ retele_conv.py
 *.csv
 __pycache__/confusion_matrix_metrics.cpython-39.pyc
 *.pyc
+*.h5
+*.png
+*.jpg
+debugging_covnet.py
+*.pyc
+*.pyc
+__pycache__/confusion_matrix_metrics.cpython-39.pyc
