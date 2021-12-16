@@ -13,7 +13,7 @@ def conf_mat(prob_arr, input_arr):
         conf_arr = [[0, 0], [0, 0]]
         n=len(input_arr)
         for i in range(n):
-                if int(input_arr[i]) == 0 :
+                if int(prob_arr[i]) == 0 :
                         if float(prob_arr[i]) < 0.5:
                                 conf_arr[0][0] = conf_arr[0][0] + 1
                         else:
@@ -31,6 +31,6 @@ def metrics(conf_arr,input_arr):
     senzitivity=float (conf_arr[1][1]/(conf_arr[1][1]+conf_arr[1][0]))
     specifity=float(conf_arr[0][0]/(conf_arr[0][0]+conf_arr[0][1]))
     precision=float(conf_arr[1][1]/(conf_arr[1][1]+conf_arr[0][1]))
-    recall=float(conf_arr[0][1]/(conf_arr[0][0]+conf_arr[0][1])) 
+    FPR=float(conf_arr[0][1]/(conf_arr[0][0]+conf_arr[0][1])) 
     f1=2*(precision*senzitivity/(precision+senzitivity))
-    return accuracy,senzitivity,specifity,precision,recall,f1
+    return accuracy,senzitivity,specifity,precision,FPR,f1
