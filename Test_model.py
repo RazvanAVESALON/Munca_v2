@@ -18,14 +18,16 @@ config = None
 with open('config.yml') as f: # reads .yml/.yaml files
     config = yaml.load(f)
 
-dataset_dir  = config['net']['dir']
-BATCH_SIZE = config['train']['bs']
 
 validation_datagen = ImageDataGenerator(rescale=1./255)    
-new_model = keras.models.load_model('damn1926_12152021.h5')
+new_model = keras.models.load_model(r"D:\ai intro\Munca_v2\Experimente Confusion Matrix\big dataset\primul test\damn1633_12132021.h5")
 new_model.summary()
 
-test_generator = validation_datagen.flow_from_directory(dataset_dir + '/test', target_size=config['net']['img'], batch_size=config['train']['bs'], class_mode='binary')
+test_generator = validation_datagen.flow_from_directory(dataset_dir + '/test', 
+                                                        target_size=config['net']['img'], 
+                                                        batch_size=config['train']['bs'], 
+                                                        class_mode='binary',
+                                                        shuffle=False)
 print (test_generator)
 probs=new_model.predict_generator(test_generator)
 
@@ -48,7 +50,10 @@ print("acc",acc,"PPV",preci,"FPR",reca,"f1:",F1)
 ConfusionMatrixDisplay.from_predictions(test_generator.classes, preds)
 plt.show()
 
-fpr, tpr, thresholds = roc_curve(test_generator.classes, probs)
+print(test_generator.classes[:5], type(test_generator.classes))
+print(probs[:5])
+
+fpr, tpr, thresholds = roc_curve(test_generator.classes, probs, pos_label=1)
 plt.plot(fpr,tpr, marker='.', label='Logistic')
 plt.xlabel('False Positive Rate')
 plt.ylabel('True Positive Rate')
