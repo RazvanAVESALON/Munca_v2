@@ -1,11 +1,12 @@
 
-def convert_prob(probilities):
-    for i in range(len(probilities)):
-        if(probilities[i]>0.5):
-            probilities[i]=1
+def convert_prob(probs):
+    converted_probs = []
+    for i in range(len(probs)):
+        if(probs[i] > 0.5):
+            converted_probs.append(1.)
         else:
-            probilities[i]=0   
-    return probilities          
+            converted_probs.append(0)   
+    return converted_probs          
 
 def conf_mat(prob_arr, input_arr):
 
