@@ -20,7 +20,7 @@ with open('config.yml') as f: # reads .yml/.yaml files
 
 
 validation_datagen = ImageDataGenerator(rescale=1./255)    
-new_model = keras.models.load_model(r"D:\ai intro\Munca_v2\Experimente Confusion Matrix\big dataset\primul test\damn1633_12132021.h5")
+new_model = keras.models.load_model(config['net']['dir2'], )
 new_model.summary()
 
 test_generator = validation_datagen.flow_from_directory(dataset_dir + '/test', 
