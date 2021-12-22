@@ -71,7 +71,7 @@ model.add(Dense(1, activation='sigmoid'))
 model.summary()
 conv_base.trainable = False
 
-model.compile(loss='binary_crossentropy', optimizer=tf.keras.optimizers.RMSprop(lr=config['train']['lr']), metrics=['accuracy'])
+model.compile(loss='binary_crossentropy', optimizer=tf.keras.optimizers.SGD(lr=config['train']['lr']), metrics=['accuracy'])
 callbacks =[keras.callbacks.CSVLogger(f"file{datetime.now().strftime('%H%M_%m%d%Y')}.csv", separator="," , append=False)]
 NUM_EPOCHS = config['train']['n_epochs']
 history = model.fit(train_batches, steps_per_epoch = len(train_batches) ,validation_data = validation_batches, validation_steps = len(validation_batches), epochs= NUM_EPOCHS , callbacks=callbacks)
