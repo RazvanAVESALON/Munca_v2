@@ -18,9 +18,11 @@ config = None
 with open('config.yml') as f: # reads .yml/.yaml files
     config = yaml.load(f)
 
+dataset_dir  = config['net']['dir']
+BATCH_SIZE = config['train']['bs']
 
 validation_datagen = ImageDataGenerator(rescale=1./255)    
-new_model = keras.models.load_model(config['net']['dir2'], )
+new_model = keras.models.load_model(r"D:\ai intro\Munca_v2\Experimente Confusion Matrix\big dataset\19\damn2031_12212021.h5")
 new_model.summary()
 
 test_generator = validation_datagen.flow_from_directory(dataset_dir + '/test', 
