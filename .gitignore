@@ -13,3 +13,4 @@ debugging_covnet.py
 *.pyc
 *.pyc
 __pycache__/confusion_matrix_metrics.cpython-39.pyc
+__pycache__/confusion_matrix_metrics.cpython-39.pyc
