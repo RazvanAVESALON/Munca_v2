@@ -15,7 +15,7 @@ def conf_mat(prob_arr, input_arr):
         n=len(input_arr)
         for i in range(n):
                 if int(prob_arr[i]) == 0 :
-                        if float(prob_arr[i]) < 0.5:
+                        if float(prob_arr[i]+1) < 0.5:
                                 conf_arr[0][0] = conf_arr[0][0] + 1
                         else:
                                 conf_arr[0][1] = conf_arr[0][1] + 1
