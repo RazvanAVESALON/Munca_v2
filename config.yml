@@ -1,10 +1,10 @@
 net:
   n1: 256
-  img: [256,256]
+  img: [128,128]
   dir: "D:\\ai intro\\dataset"
   dir2: "D:\\ai intro\\Munca_v2\\Experimente Confusion Matrix\\big dataset\\primul test\\damn1633_12132021.h5"
 train:
-  bs: 16
+  bs: 32
   lr: 0.0001
   opt: "RMSprop" 
   n_epochs: 100
@@ -14,7 +14,7 @@ augumentare:
   rotation_range: 90
   zca_epsilon: 0.000001
   zca_whitening: False
-  width_shift_range: 0.7
+  width_shift_range: 0.2
   height_shift_range: 0.2
   shear_range: 0.2
   zoom_range: 0.2
