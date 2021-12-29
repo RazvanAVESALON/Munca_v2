@@ -29,7 +29,7 @@ with open('config.yml') as f:
 dataset_dir  = config['net']['dir']
 BATCH_SIZE = config['train']['bs']
 
-train_datagen = ImageDataGenerator(**config['augumentare'])
+train_datagen = ImageDataGenerator(**config['augumentare'], preprocessing_function=keras.applications.vgg16.preprocess_input)
 validation_datagen = ImageDataGenerator(rescale=1./255)     
 
 train_batches = train_datagen.flow_from_directory(dataset_dir + '/train',
@@ -66,12 +66,19 @@ n1=config['net']['n1']
 model = Sequential()
 model.add(conv_base)
 model.add(Flatten())
+model.add(Dropout(0.2,input_shape=(n1,)))
 model.add(Dense(n1, activation='relu'))
 model.add(Dense(1, activation='sigmoid'))
 model.summary()
 conv_base.trainable = False
 
-model.compile(loss='binary_crossentropy', optimizer=tf.keras.optimizers.SGD(lr=config['train']['lr']), metrics=['accuracy'])
+if (config['train']['opt']=='Adam'):
+ model.compile(loss='binary_crossentropy',optimizer=tf.keras.optimizers.Adam(learning_rate=config['train']['lr']) , metrics=['accuracy'])
+elif (config['train']['opt']=='RMSprop'): 
+ model.compile(loss='binary_crossentropy',optimizer=tf.keras.optimizers.RMSprop(learning_rate=config['train']['lr']) , metrics=['accuracy'])
+elif(config['train']['opt']=='SGD'):
+ model.compile(loss='binary_crossentropy',optimizer=tf.keras.optimizers.SGD(learning_rate=config['train']['lr']) , metrics=['accuracy'])
+
 callbacks =[keras.callbacks.CSVLogger(f"file{datetime.now().strftime('%H%M_%m%d%Y')}.csv", separator="," , append=False)]
 NUM_EPOCHS = config['train']['n_epochs']
 history = model.fit(train_batches, steps_per_epoch = len(train_batches) ,validation_data = validation_batches, validation_steps = len(validation_batches), epochs= NUM_EPOCHS , callbacks=callbacks)
