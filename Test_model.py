@@ -22,7 +22,7 @@ dataset_dir  = config['net']['dir']
 BATCH_SIZE = config['train']['bs']
 
 validation_datagen = ImageDataGenerator(rescale=1./255)    
-new_model = keras.models.load_model(r"D:\ai intro\Munca_v2\Experimente Confusion Matrix\big dataset\damn2243_01042022.h5")
+new_model = keras.models.load_model(r"D:\ai intro\Munca_v2\Experimente Confusion Matrix\big dataset\19\damn2226_01082022.h5")
 new_model.summary()
 
 test_generator = validation_datagen.flow_from_directory(dataset_dir + '/test', 
