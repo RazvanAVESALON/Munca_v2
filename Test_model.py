@@ -9,7 +9,7 @@ from plot_acc_loss import plot_acc_loss
 from tensorflow.keras.applications import VGG16
 import yaml
 from confusion_matrix_metrics import convert_prob , conf_mat, metrics
-from sklearn.metrics import roc_curve,roc_auc_score,confusion_matrix, accuracy_score,recall_score,f1_score,precision_score,plot_confusion_matrix,ConfusionMatrixDisplay
+from sklearn.metrics import roc_curve,roc_auc_score,confusion_matrix, accuracy_score,recall_score,f1_score,precision_score,plot_confusion_matrix,ConfusionMatrixDisplay,precision_recall_curve
 import matplotlib.pyplot as plt
 import pandas as pd 
 from sklearn.model_selection import train_test_split
@@ -22,7 +22,7 @@ dataset_dir  = config['net']['dir']
 BATCH_SIZE = config['train']['bs']
 
 validation_datagen = ImageDataGenerator(rescale=1./255)    
-new_model = keras.models.load_model(r"D:\ai intro\Munca_v2\Experimente Confusion Matrix\big dataset\19\damn2031_12212021.h5")
+new_model = keras.models.load_model(r"D:\ai intro\Munca_v2\Experimente Confusion Matrix\big dataset\damn2243_01042022.h5")
 new_model.summary()
 
 test_generator = validation_datagen.flow_from_directory(dataset_dir + '/test', 
@@ -56,7 +56,7 @@ print(test_generator.classes[:5], type(test_generator.classes))
 print(probs[:5])
 
 fpr, tpr, thresholds = roc_curve(test_generator.classes, probs, pos_label=1)
-plt.plot(fpr,tpr, marker='.', label='Logistic')
+plt.plot(fpr,tpr, marker='.', label='ROC_CURVE')
 plt.xlabel('False Positive Rate')
 plt.ylabel('True Positive Rate')
 plt.legend()
@@ -64,6 +64,13 @@ plt.show()
 
 auc = roc_auc_score(test_generator.classes,  probs)
 print('AUC: %.3f' % auc)
+
+precision, recall, thresholds = precision_recall_curve(test_generator.classes, probs)
+plt.plot(precision,recall, marker='.', label='Precision_recall')
+plt.xlabel('Precision')
+plt.ylabel('Recall')
+plt.legend()
+plt.show()
 
 
 test_loss, test_acc = new_model.evaluate_generator(test_generator, steps=len(test_generator))
